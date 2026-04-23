@@ -218,6 +218,32 @@ main{max-width:1020px;margin:0 auto;padding:2rem 3rem 4rem;background:#fff;}
   z-index:0;
   filter:grayscale(1) contrast(1.3);
 }
+
+/* ── ANIMATIONS ── */
+@keyframes float{0%,100%{transform:translateY(0px);}50%{transform:translateY(-12px);}}
+.photo-shape{animation:float 5s ease-in-out infinite;}
+.stat-num{transition:opacity 0.4s ease;}
+@keyframes pillIn{from{opacity:0;transform:translateY(8px) scale(0.92);}to{opacity:1;transform:translateY(0) scale(1);}}
+.pill{opacity:0;animation:pillIn 0.35s ease forwards;}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-28px);}to{opacity:1;transform:translateX(0);}}
+.titem{opacity:0;}
+.titem.visible{animation:slideInLeft 0.45s ease forwards;}
+.nav-tab{position:relative;overflow:hidden;}
+.nav-tab::after{content:'';position:absolute;bottom:4px;left:50%;width:0;height:2px;background:#F5C518;transition:width 0.25s ease,left 0.25s ease;border-radius:2px;}
+.nav-tab:hover::after{width:60%;left:20%;}
+.nav-tab.active::after{width:0;}
+@keyframes cardSlide{from{opacity:0;transform:translateX(-20px);}to{opacity:1;transform:translateX(0);}}
+.role-card{opacity:0;animation:cardSlide 0.5s ease forwards;}
+.role-card:nth-child(1){animation-delay:0.2s;}
+.role-card:nth-child(2){animation-delay:0.4s;}
+.role-card:nth-child(3){animation-delay:0.6s;}
+@keyframes heroIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero-greeting{animation:heroIn 0.6s ease 0.1s both;}
+.hero-name{animation:heroIn 0.6s ease 0.25s both;}
+.hero-title{animation:heroIn 0.6s ease 0.4s both;}
+.hero-desc{animation:heroIn 0.6s ease 0.55s both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
 /* responsive */
 @media(max-width:760px){
   nav{padding:0.9rem 1.25rem;}
@@ -453,12 +479,62 @@ main{max-width:1020px;margin:0 auto;padding:2rem 3rem 4rem;background:#fff;}
 
 <script>
 const PANELS=['about','research','experience','education','projects','skills','certs','contact','awards'];
+
 function showPanel(id){
   PANELS.forEach((p,i)=>{
     document.getElementById('panel-'+p).classList.toggle('active',p===id);
     document.querySelectorAll('.nav-tab')[i].classList.toggle('active',p===id);
   });
   document.getElementById('panels').scrollIntoView({behavior:'smooth',block:'start'});
+  if(id==='about') triggerCountUp();
+  if(id==='skills') triggerPills();
+  if(id==='experience'||id==='education'||id==='awards') triggerTimeline(id);
 }
+
+function triggerCountUp(){
+  document.querySelectorAll('.stat-num').forEach(function(el){
+    var text = el.dataset.target || el.textContent.trim();
+    el.dataset.target = text;
+    var match = text.match(/^([0-9]+)(.*)/);
+    if(!match){el.textContent=text;return;}
+    var num = parseInt(match[1]);
+    var suffix = match[2];
+    var start=0, dur=1200, step=20;
+    var inc = Math.ceil(num/(dur/step));
+    el.textContent='0'+suffix;
+    var timer=setInterval(function(){
+      start=Math.min(start+inc,num);
+      el.textContent=start+suffix;
+      if(start>=num) clearInterval(timer);
+    },step);
+  });
+}
+
+function triggerPills(){
+  document.querySelectorAll('#panel-skills .pill').forEach(function(pill,i){
+    pill.style.animation='none';
+    pill.style.opacity='0';
+    setTimeout(function(){
+      pill.style.animation='pillIn 0.35s ease '+(i*30)+'ms forwards';
+    },10);
+  });
+}
+
+function triggerTimeline(id){
+  var items=document.querySelectorAll('#panel-'+id+' .titem');
+  items.forEach(function(item,i){
+    item.classList.remove('visible');
+    item.style.animationDelay='';
+    setTimeout(function(){
+      item.style.animationDelay=(i*120)+'ms';
+      item.classList.add('visible');
+    },30);
+  });
+}
+
+window.addEventListener('load',function(){
+  triggerCountUp();
+  triggerTimeline('experience');
+});
 </script>
 </body></html>
