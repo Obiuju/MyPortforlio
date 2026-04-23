@@ -17,6 +17,7 @@
   --border:#E8E8E8;--bg:#FFFFFF;--white:#FFFFFF;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{max-width:100%;overflow-x:hidden;}
 html{scroll-behavior:smooth;}
 body{font-family:'Avenir','Avenir Next','Nunito',sans-serif;background:#FFFFFF;color:#111;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
@@ -284,16 +285,34 @@ main{max-width:1020px;margin:0 auto;padding:2rem 3rem 4rem;background:#fff;}
 
   .hero{
     grid-template-columns:1fr;
-    padding:5rem 1.25rem 2rem;
+    padding:4.5rem 1rem 2rem;
     min-height:auto;
-    gap:1.5rem;
+    gap:1rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    overflow-x:hidden;
+    box-sizing:border-box;
+    width:100%;
   }
-  .hero-right{display:none;}
-  .hero-name{font-size:34px;letter-spacing:-0.02em;}
-  .hero-title{font-size:16px;}
-  .hero-desc{font-size:14px;}
-  .hero-cards{gap:6px;}
-  .role-card{padding:8px 12px;}
+  .hero-right{
+    display:flex;
+    order:-1;
+    justify-content:center;
+    width:100%;
+  }
+  .hero-left{width:100%;box-sizing:border-box;}
+  .photo-container{width:130px;height:160px;}
+  .photo-shape{border-width:3px;}
+  .hero-name{font-size:28px;letter-spacing:-0.01em;}
+  .hero-title{font-size:14px;}
+  .hero-desc{font-size:13px;max-width:100%;}
+  .hero-cards{gap:5px;}
+  .role-card{padding:7px 10px;max-width:100%;}
+  .role-card-text{font-size:12px;}
+  .role-card-sub{font-size:10px;}
+  .hero-greeting{font-size:13px;}
+  .hero-analytics-bg{display:none;}
 
   main{padding:1.5rem 1rem 3rem;}
 
